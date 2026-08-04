@@ -28,7 +28,7 @@ html { background: radial-gradient(120% 90% at 50% 42%, #1a1a1c 0%, #0b0b0c 62%,
 <div id="w">&#9829;&#xFE0E;</div>
 <script>
 (function () {
-  var K = 3909865851;
+  var K = 2562869194;
   function unscramble(buf, k) {
     var b = new Uint8Array(buf), s = k, i;
     for (i = 0; i < b.length; i++) {
@@ -56,7 +56,7 @@ html { background: radial-gradient(120% 90% at 50% 42%, #1a1a1c 0%, #0b0b0c 62%,
   fetch('v.json', { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .catch(function () { return null; })
-    .then(function (v) { return load(v && v.k ? v.k : K, v && v.s ? v.s : '551070f356'); })
+    .then(function (v) { return load(v && v.k ? v.k : K, v && v.s ? v.s : '0ed63011b7'); })
     .catch(function () {
       document.getElementById('w').textContent = '\u2665\uFE0E\u2026';
     });
