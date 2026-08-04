@@ -28,36 +28,38 @@ html { background: radial-gradient(120% 90% at 50% 42%, #1a1a1c 0%, #0b0b0c 62%,
 <div id="w">&#9829;&#xFE0E;</div>
 <script>
 (function () {
-  var K = 1802406094;
-  function unscramble(buf) {
-    var b = new Uint8Array(buf), s = K, i;
+  var K = 3909865851;
+  function unscramble(buf, k) {
+    var b = new Uint8Array(buf), s = k, i;
     for (i = 0; i < b.length; i++) {
       s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0;
       b[i] = b[i] ^ (s & 255);
     }
     return b;
   }
-  function load(bust) {
-    var url = 'l-ba012ed355.bin' + (bust ? '?r=' + Date.now() : '');
-    return fetch(url, bust ? { cache: 'reload' } : undefined).then(function (r) {
+  function load(key, stamp) {
+    return fetch('l-' + stamp + '.bin').then(function (r) {
       if (!r.ok) throw 0;
       return r.arrayBuffer();
     }).then(function (buf) {
-      var html = new TextDecoder('utf-8').decode(unscramble(buf));
-      /* belt and braces: if anything ever pairs the wrong blob with this
-         loader, refetch past the cache once instead of writing garbage */
-      if (html.lastIndexOf('<!doctype', 0) !== 0) {
-        if (bust) throw 0;
-        return load(true);
-      }
+      var html = new TextDecoder('utf-8').decode(unscramble(buf, key));
+      if (html.lastIndexOf('<!doctype', 0) !== 0) throw 0;
       document.open();
       document.write(html);
       document.close();
     });
   }
-  load(false).catch(function () {
-    document.getElementById('w').textContent = '\u2665\uFE0E\u2026';
-  });
+  /* GitHub Pages caches this loader for 10 minutes, so a returning visitor can
+     be handed a stale one and shown the previous build in full. This file is
+     fetched with no-store, so it is always current, and it names the build to
+     load — which means even a stale loader renders the newest letter. */
+  fetch('v.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .catch(function () { return null; })
+    .then(function (v) { return load(v && v.k ? v.k : K, v && v.s ? v.s : '551070f356'); })
+    .catch(function () {
+      document.getElementById('w').textContent = '\u2665\uFE0E\u2026';
+    });
 })();
 </script>
 </body>
